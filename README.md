@@ -8,7 +8,7 @@ in Docker if you have __macOS__, in the settings in __Resources__, you need to a
 
 After running Docker:
 ```
-docker pull shilovski/dl_cerberus:multi-arch
+docker pull s1n0nn/dl_cerberus:multi-arch
 docker run -it --cpus="4.0" --memory="8g" shilovski/dl_cerberus:multi-arch
 ```
 where the first one downloads the __Image__ and the second launch of the __Container__.
