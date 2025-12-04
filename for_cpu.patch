@@ -1,0 +1,48 @@
+Subject: [PATCH] for_cpu
+---
+Index: environment.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+diff --git a/infer/base.py b/infer/base.py
+--- a/infer/base.py	(revision 5bcecbb071bebd5911250034c94f3568f23f50bb)
++++ b/infer/base.py	(revision e0bb14dbd3134791095a0086493781ff105112a8)
+@@ -25,7 +25,7 @@
+         # TODO: deal with parsing multi level model desc
+         net = model_creator(**self.model_args)
+         # pytorch_total_params = sum(p.numel() for p in net.parameters())
+-        saved_state_dict = torch.load(self.checkpoint_path)["desc"]
++        saved_state_dict = torch.load(self.checkpoint_path, map_location=torch.device('cpu'))["desc"]
+ 
+         variable_name_list = list(saved_state_dict.keys())
+         is_in_parallel_mode = all(
+@@ -44,7 +44,7 @@
+             }
+         net.load_state_dict(saved_state_dict, strict=True)
+         net = torch.nn.DataParallel(net)
+-        net = net.to("cuda")
++        net = net.to("cpu")
+ 
+         module_lib = import_module("models.run_desc")
+         run_step = getattr(module_lib, "infer_step")
+Index: models/run_desc.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/models/run_desc.py b/models/run_desc.py
+--- a/models/run_desc.py	(revision 5bcecbb071bebd5911250034c94f3568f23f50bb)
++++ b/models/run_desc.py	(revision e0bb14dbd3134791095a0086493781ff105112a8)
+@@ -437,7 +437,7 @@
+ 
+ 
+ def infer_step(img_list, model, output_shape, head_name_list):
+-    img_list = img_list.to("cuda").type(torch.float32)  # to NCHW
++    img_list = img_list.to("cpu").type(torch.float32)  # to NCHW
+     img_list = img_list.permute(0, 3, 1, 2).contiguous()
+ 
+     if not isinstance(output_shape, list):
+Index: run_tile.sh
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
