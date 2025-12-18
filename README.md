@@ -8,6 +8,5 @@ docker pull s1n0nn/dl_cerberus:multi-arch
 
 
 ```
-docker pull s1n0nn/dl_cerberus:multi-arch
 docker run -it s1n0nn/dl_cerberus:multi-arch
 ```
