@@ -3,7 +3,7 @@ FROM continuumio/miniconda3:latest
 WORKDIR /workdir
 
 COPY environment.yml .
-RUN apt-get update && apt-get -y install make git gcc ffmpeg libsm6 libxext6
+RUN apt-get update && apt-get -y install make git gcc ffmpeg libsm6 libxext6 imagecodecs
 
 RUN conda env create -f environment.yml
 SHELL ["conda", "run", "-n", "cerberus", "/bin/bash", "-c"]
